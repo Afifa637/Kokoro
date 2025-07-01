@@ -1,11 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native';
+import ThemedView from '@/components/ThemedView';
+
+import { StyleSheet, Text} from 'react-native';
 
 export default function ChatScreen() {
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <Text style={styles.title}>Welcome to the Chat Page 💬</Text>
       <Text style={styles.subtitle}>Your messages will appear here.</Text>
-    </View>
+    </ThemedView>
   );
 }
 
