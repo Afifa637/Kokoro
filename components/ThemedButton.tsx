@@ -17,9 +17,10 @@ interface ThemedButtonProps {
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   children?: React.ReactNode;
+  textColor?: string;
 }
 
-const ThemedButton = ({ title, onPress, style, textStyle, children, ...props }: ThemedButtonProps) => {
+const ThemedButton = ({ title, onPress, style, textStyle, textColor, children, ...props }: ThemedButtonProps) => {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'light'];
 
@@ -35,7 +36,7 @@ const ThemedButton = ({ title, onPress, style, textStyle, children, ...props }: 
       {...props}
     >
       {title ? (
-        <Text style={[styles.text, { color: theme.text ?? '#000' }, textStyle]}>
+        <Text style={[styles.text, { color: theme.text ?? '#000' }, textColor ? {color: textColor}: null, textStyle]}>
           {title}
         </Text>
       ) : (
