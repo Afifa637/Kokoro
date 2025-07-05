@@ -6,7 +6,7 @@ export default function AuthLayout() {
     <>
       <StatusBar style="auto" />
       <Stack
-        initialRouteName="login"
+        // initialRouteName="login"
         screenOptions={{
           headerShown: false,
           animation: "fade_from_bottom",
