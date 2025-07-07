@@ -1,0 +1,1565 @@
+import React, { useEffect, useState } from 'react';
+import { Dimensions, Image, ImageBackground, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
+
+
+const { width, height } = Dimensions.get('window');
+
+const ConfettiPiece = ({ delay = 0 }: { delay?: number }) => {
+  const translateY = useSharedValue(-50);
+  const rotate = useSharedValue(0);
+  const opacity = useSharedValue(1);
+
+  useEffect(() => {
+    setTimeout(() => {
+      translateY.value = withTiming(height + 100, {
+        duration: 3000,
+        easing: Easing.out(Easing.quad),
+      });
+      rotate.value = withRepeat(
+        withTiming(360, { duration: 1000 }),
+        3,
+        false
+      );
+      opacity.value = withTiming(0, { duration: 3000 });
+    }, delay);
+  }, [delay, translateY, rotate, opacity]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: translateY.value },
+      { rotate: `${rotate.value}deg` },
+    ],
+    opacity: opacity.value,
+  }));
+
+  return (
+    <Animated.View style={[styles.confettiPiece, animatedStyle]}>
+      <View style={[styles.confettiSquare, { backgroundColor: ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'][Math.floor(Math.random() * 5)] }]} />
+    </Animated.View>
+  );
+};
+
+const SimpleConfetti = () => {
+  return (
+    <View style={styles.confettiContainer}>
+      {Array.from({ length: 15 }).map((_, index) => (
+        <ConfettiPiece key={index} delay={index * 100} />
+      ))}
+    </View>
+  );
+};
+
+/* COMMENTED OUT - ALL EXPLOSION COMPONENTS AND LOGIC
+// All explosion-related constants, components, and logic have been commented out
+// to be replaced with the GlitterExplosionSkia component.
+// This includes: ExplosionRay, MainExplosionRay, SubExplosionRay, ExplosionParticle,
+// ExplosionWave, GlitterParticle, SparkleParticle, IntenseExplosionRay, MagicalExplosion
+// and all their associated constants and animations.
+*/
+
+const messages
+  const scale = useSharedValue(0);
+  const opacity = useSharedValue(0);
+  const rotation = useSharedValue((360 / RAYS_COUNT) * index + Math.random() * 10 - 5);
+  const shimmer = useSharedValue(0);
+  const length = useSharedValue(0);
+  
+  // Jir jir (jittery) effects
+  const jitterX = useSharedValue(0);
+  const jitterY = useSharedValue(0);
+  const jitterRotation = useSharedValue(0);
+  const jitterWidth = useSharedValue(1);
+  const zigzagOffset = useSharedValue(0);
+
+  useEffect(() => {
+    if (isVisible) {
+      const delay = index * 15 + Math.random() * 50;
+      setTimeout(() => {
+        length.value = withSequence(
+          withTiming(0, { duration: 0 }),
+          withTiming(6.5 + Math.random() * 3.0, { duration: 150 + Math.random() * 100, easing: Easing.out(Easing.quad) }),
+          withTiming(8.2 + Math.random() * 2.5, { duration: 200 }),
+          withTiming(7.8, { duration: 300 }),
+          withTiming(0, { duration: 500, easing: Easing.in(Easing.quad) })
+        );
+        
+        scale.value = withSequence(
+          withTiming(0, { duration: 0 }),
+          withTiming(3.5 + Math.random() * 1.5, { duration: 120, easing: Easing.out(Easing.quad) }),
+          withTiming(4.0 + Math.random() * 1.0, { duration: 180 }),
+          withTiming(3.5, { duration: 250 }),
+          withTiming(0, { duration: 450, easing: Easing.in(Easing.quad) })
+        );
+        
+        opacity.value = withSequence(
+          withTiming(1, { duration: 80 }),
+          withTiming(0.95, { duration: 200 }),
+          withTiming(0.8, { duration: 300 }),
+          withTiming(0, { duration: 420 })
+        );
+
+        shimmer.value = withRepeat(
+          withSequence(
+            withTiming(1, { duration: 40 }),
+            withTiming(0.3, { duration: 40 }),
+            withTiming(1, { duration: 40 }),
+            withTiming(0.5, { duration: 40 }),
+            withTiming(1, { duration: 40 }),
+            withTiming(0.2, { duration: 40 })
+          ),
+          8,
+          false
+        );
+
+        // Jir jir (jittery) animations for energetic effect
+        jitterX.value = withRepeat(
+          withSequence(
+            withTiming(Math.random() * 6 - 3, { duration: 30 }),
+            withTiming(Math.random() * 4 - 2, { duration: 25 }),
+            withTiming(Math.random() * 8 - 4, { duration: 35 }),
+            withTiming(0, { duration: 40 })
+          ),
+          15,
+          false
+        );
+
+        jitterY.value = withRepeat(
+          withSequence(
+            withTiming(Math.random() * 4 - 2, { duration: 35 }),
+            withTiming(Math.random() * 6 - 3, { duration: 30 }),
+            withTiming(Math.random() * 3 - 1.5, { duration: 25 }),
+            withTiming(0, { duration: 35 })
+          ),
+          15,
+          false
+        );
+
+        jitterRotation.value = withRepeat(
+          withSequence(
+            withTiming(Math.random() * 8 - 4, { duration: 40 }),
+            withTiming(Math.random() * 6 - 3, { duration: 30 }),
+            withTiming(Math.random() * 10 - 5, { duration: 35 }),
+            withTiming(0, { duration: 45 })
+          ),
+          12,
+          false
+        );
+
+        jitterWidth.value = withRepeat(
+          withSequence(
+            withTiming(1 + Math.random() * 0.4, { duration: 50 }),
+            withTiming(0.7 + Math.random() * 0.3, { duration: 45 }),
+            withTiming(1.2 + Math.random() * 0.5, { duration: 40 }),
+            withTiming(1, { duration: 35 })
+          ),
+          10,
+          false
+        );
+
+        // Zigzag effect for ray path
+        zigzagOffset.value = withRepeat(
+          withSequence(
+            withTiming(Math.random() * 10 - 5, { duration: 60 }),
+            withTiming(Math.random() * 8 - 4, { duration: 50 }),
+            withTiming(Math.random() * 12 - 6, { duration: 70 }),
+            withTiming(0, { duration: 50 })
+          ),
+          8,
+          false
+        );
+      }, delay);
+    } else {
+      scale.value = 0;
+      opacity.value = 0;
+      shimmer.value = 0;
+      length.value = 0;
+      jitterX.value = 0;
+      jitterY.value = 0;
+      jitterRotation.value = 0;
+      jitterWidth.value = 1;
+      zigzagOffset.value = 0;
+    }
+  }, [isVisible, index, scale, opacity, shimmer, length, jitterX, jitterY, jitterRotation, jitterWidth, zigzagOffset]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: jitterX.value + zigzagOffset.value },
+      { translateY: jitterY.value },
+      { rotate: `${rotation.value + jitterRotation.value}deg` },
+      { scaleY: length.value },
+      { scaleX: scale.value * jitterWidth.value },
+    ],
+    opacity: opacity.value * (0.8 + shimmer.value * 0.2),
+  }));
+
+  const animatedSparkleStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: jitterX.value * 0.7 + zigzagOffset.value * 0.8 },
+      { translateY: jitterY.value * 0.6 },
+      { rotate: `${rotation.value + jitterRotation.value * 0.8}deg` },
+      { scaleY: length.value * 0.9 },
+      { scaleX: scale.value * 0.8 * jitterWidth.value },
+    ],
+    opacity: shimmer.value * opacity.value * 0.9,
+  }));
+
+  return (
+    <>
+      <Animated.View style={[styles.explosionRay, animatedStyle]} />
+      <Animated.View style={[styles.explosionRaySparkle, animatedSparkleStyle]} />
+    </>
+  );
+};
+
+const MainExplosionRay = ({ index, isVisible }: { index: number; isVisible: boolean }) => {
+  const scale = useSharedValue(0);
+  const opacity = useSharedValue(0);
+  const rotation = useSharedValue((360 / MAIN_RAYS) * index);
+  const shimmer = useSharedValue(0);
+  const length = useSharedValue(0);
+  
+  // Jitter effects for main rays too
+  const jitterX = useSharedValue(0);
+  const jitterY = useSharedValue(0);
+  const jitterRotation = useSharedValue(0);
+  const jitterWidth = useSharedValue(1);
+
+  useEffect(() => {
+    if (isVisible) {
+      const delay = index * 30; // Faster start
+      setTimeout(() => {
+        // Much longer rays that fill the screen
+        length.value = withSequence(
+          withTiming(0, { duration: 0 }),
+          withTiming(4.5, { duration: 200, easing: Easing.out(Easing.quad) }),
+          withTiming(5.5, { duration: 150 }),
+          withTiming(4.8, { duration: 200 }),
+          withTiming(0, { duration: 350, easing: Easing.in(Easing.quad) })
+        );
+        
+        // Wider, more powerful rays
+        scale.value = withSequence(
+          withTiming(0, { duration: 0 }),
+          withTiming(3.0, { duration: 180, easing: Easing.out(Easing.quad) }),
+          withTiming(3.5, { duration: 120 }),
+          withTiming(2.8, { duration: 150 }),
+          withTiming(0, { duration: 280, easing: Easing.in(Easing.quad) })
+        );
+        
+        opacity.value = withSequence(
+          withTiming(1, { duration: 100 }),
+          withTiming(0.98, { duration: 250 }),
+          withTiming(0.9, { duration: 180 }),
+          withTiming(0, { duration: 280 })
+        );
+
+        // Intense shimmer like reference image
+        shimmer.value = withRepeat(
+          withSequence(
+            withTiming(1, { duration: 30 }),
+            withTiming(0.4, { duration: 30 }),
+            withTiming(1, { duration: 30 }),
+            withTiming(0.6, { duration: 30 }),
+            withTiming(1, { duration: 30 }),
+            withTiming(0.3, { duration: 30 })
+          ),
+          10,
+          false
+        );
+
+        // Add jitter to main rays for energy
+        jitterX.value = withRepeat(
+          withSequence(
+            withTiming(Math.random() * 4 - 2, { duration: 40 }),
+            withTiming(Math.random() * 6 - 3, { duration: 35 }),
+            withTiming(Math.random() * 3 - 1.5, { duration: 30 }),
+            withTiming(0, { duration: 25 })
+          ),
+          8,
+          false
+        );
+
+        jitterRotation.value = withRepeat(
+          withSequence(
+            withTiming(Math.random() * 6 - 3, { duration: 45 }),
+            withTiming(Math.random() * 4 - 2, { duration: 35 }),
+            withTiming(0, { duration: 30 })
+          ),
+          6,
+          false
+        );
+
+        jitterWidth.value = withRepeat(
+          withSequence(
+            withTiming(1 + Math.random() * 0.3, { duration: 60 }),
+            withTiming(0.8 + Math.random() * 0.4, { duration: 50 }),
+            withTiming(1.1 + Math.random() * 0.2, { duration: 45 }),
+            withTiming(1, { duration: 40 })
+          ),
+          5,
+          false
+        );
+      }, delay);
+    } else {
+      scale.value = 0;
+      opacity.value = 0;
+      shimmer.value = 0;
+      length.value = 0;
+      jitterX.value = 0;
+      jitterY.value = 0;
+      jitterRotation.value = 0;
+      jitterWidth.value = 1;
+    }
+  }, [isVisible, index, scale, opacity, shimmer, length, jitterX, jitterY, jitterRotation, jitterWidth]);
+
+  const mainRayStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: jitterX.value },
+      { translateY: jitterY.value },
+      { rotate: `${rotation.value + jitterRotation.value}deg` },
+      { scaleY: length.value },
+      { scaleX: scale.value * jitterWidth.value },
+    ],
+    opacity: opacity.value * (0.9 + shimmer.value * 0.1),
+  }));
+
+  const sparkleStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: jitterX.value * 0.8 },
+      { translateY: jitterY.value * 0.7 },
+      { rotate: `${rotation.value + jitterRotation.value * 0.6}deg` },
+      { scaleY: length.value * 0.95 },
+      { scaleX: scale.value * 0.9 * jitterWidth.value },
+    ],
+    opacity: shimmer.value * opacity.value * 0.95,
+  }));
+
+  return (
+    <>
+      <Animated.View style={[styles.mainExplosionRay, mainRayStyle]} />
+      <Animated.View style={[styles.mainRaySparkle, sparkleStyle]} />
+    </>
+  );
+};
+
+const SubExplosionRay = ({ index, isVisible }: { index: number; isVisible: boolean }) => {
+  const scale = useSharedValue(0);
+  const opacity = useSharedValue(0);
+  const rotation = useSharedValue((360 / SUB_RAYS) * index + Math.random() * 15 - 7.5);
+  const shimmer = useSharedValue(0);
+  const length = useSharedValue(0);
+
+  useEffect(() => {
+    if (isVisible) {
+      const delay = 60 + index * 25;
+      setTimeout(() => {
+        length.value = withSequence(
+          withTiming(0, { duration: 0 }),
+          withTiming(1.5 + Math.random() * 0.8, { duration: 180 + Math.random() * 80, easing: Easing.out(Easing.quad) }),
+          withTiming(1.8 + Math.random() * 0.5, { duration: 150 }),
+          withTiming(1.2, { duration: 180 }),
+          withTiming(0, { duration: 300, easing: Easing.in(Easing.quad) })
+        );
+        
+        scale.value = withSequence(
+          withTiming(0, { duration: 0 }),
+          withTiming(1.0 + Math.random() * 0.5, { duration: 160, easing: Easing.out(Easing.quad) }),
+          withTiming(1.2 + Math.random() * 0.3, { duration: 130 }),
+          withTiming(0.8, { duration: 160 }),
+          withTiming(0, { duration: 280, easing: Easing.in(Easing.quad) })
+        );
+        
+        opacity.value = withSequence(
+          withTiming(0.8 + Math.random() * 0.2, { duration: 100 }),
+          withTiming(0.7, { duration: 200 }),
+          withTiming(0.5, { duration: 180 }),
+          withTiming(0, { duration: 250 })
+        );
+
+        shimmer.value = withRepeat(
+          withSequence(
+            withTiming(1, { duration: 40 }),
+            withTiming(0.3, { duration: 40 }),
+            withTiming(0.9, { duration: 40 }),
+            withTiming(0.1, { duration: 40 })
+          ),
+          7,
+          false
+        );
+      }, delay);
+    } else {
+      scale.value = 0;
+      opacity.value = 0;
+      shimmer.value = 0;
+      length.value = 0;
+    }
+  }, [isVisible, index, scale, opacity, shimmer, length]);
+
+  const subRayStyle = useAnimatedStyle(() => ({
+    transform: [
+      { rotate: `${rotation.value}deg` },
+      { scaleY: length.value },
+      { scaleX: scale.value },
+    ],
+    opacity: opacity.value * (0.7 + shimmer.value * 0.3),
+  }));
+
+  return (
+    <Animated.View style={[styles.subExplosionRay, subRayStyle]} />
+  );
+};
+
+const ExplosionParticle = ({ index, isVisible }: { index: number; isVisible: boolean }) => {
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+  const scale = useSharedValue(0);
+  const opacity = useSharedValue(0);
+  const rotation = useSharedValue(0);
+  const pulse = useSharedValue(1);
+
+  useEffect(() => {
+    if (isVisible) {
+      const delay = 80 + index * 25; // Faster, more dynamic
+      const angle = (360 / PARTICLES_COUNT) * index + Math.random() * 30 - 15;
+      const distance = 130 + Math.random() * 120;
+      const endX = Math.cos(angle * Math.PI / 180) * distance;
+      const endY = Math.sin(angle * Math.PI / 180) * distance;
+
+      setTimeout(() => {
+        translateX.value = withTiming(endX, { 
+          duration: 700 + Math.random() * 300, 
+          easing: Easing.out(Easing.quad) 
+        });
+        translateY.value = withTiming(endY, { 
+          duration: 700 + Math.random() * 300, 
+          easing: Easing.out(Easing.quad) 
+        });
+        
+        scale.value = withSequence(
+          withTiming(0, { duration: 0 }),
+          withTiming(1.5, { duration: 180 }),
+          withTiming(1, { duration: 200 }),
+          withTiming(0.2, { duration: 500 })
+        );
+        
+        opacity.value = withSequence(
+          withTiming(1, { duration: 150 }),
+          withTiming(0.9, { duration: 300 }),
+          withTiming(0, { duration: 450 })
+        );
+        
+        rotation.value = withTiming(360 + Math.random() * 540, { 
+          duration: 700 + Math.random() * 300 
+        });
+
+        // Add pulsing effect for glitter
+        pulse.value = withRepeat(
+          withSequence(
+            withTiming(1.3, { duration: 120 }),
+            withTiming(0.8, { duration: 120 }),
+            withTiming(1.1, { duration: 120 }),
+            withTiming(0.9, { duration: 120 })
+          ),
+          4,
+          false
+        );
+      }, delay);
+    } else {
+      translateX.value = 0;
+      translateY.value = 0;
+      scale.value = 0;
+      opacity.value = 0;
+      rotation.value = 0;
+      pulse.value = 1;
+    }
+  }, [isVisible, index, translateX, translateY, scale, opacity, rotation, pulse]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translateX.value },
+      { translateY: translateY.value },
+      { scale: scale.value * pulse.value },
+      { rotate: `${rotation.value}deg` },
+    ],
+    opacity: opacity.value,
+  }));
+
+  return (
+    <Animated.View style={[styles.explosionParticle, animatedStyle]} />
+  );
+};
+
+const ExplosionWave = ({ index, isVisible }: { index: number; isVisible: boolean }) => {
+  const scale = useSharedValue(0);
+  const opacity = useSharedValue(0);
+
+  useEffect(() => {
+    if (isVisible) {
+      const delay = index * 150;
+      setTimeout(() => {
+        scale.value = withTiming(3 + index * 0.5, { 
+          duration: 1000 + index * 200, 
+          easing: Easing.out(Easing.quad) 
+        });
+        
+        opacity.value = withSequence(
+          withTiming(0.6 - index * 0.15, { duration: 200 }),
+          withTiming(0, { duration: 800 + index * 200 })
+        );
+      }, delay);
+    } else {
+      scale.value = 0;
+      opacity.value = 0;
+    }
+  }, [isVisible, index, scale, opacity]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: opacity.value,
+  }));
+
+  return (
+    <Animated.View style={[styles.explosionWave, animatedStyle]} />
+  );
+};
+
+const GlitterParticle = ({ index, isVisible }: { index: number; isVisible: boolean }) => {
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+  const scale = useSharedValue(0);
+  const opacity = useSharedValue(0);
+  const rotate = useSharedValue(0);
+  const shimmer = useSharedValue(0);
+
+  useEffect(() => {
+    if (isVisible) {
+      const angle = (360 / GLITTER_COUNT) * index + Math.random() * 60 - 30;
+      const distance = 120 + Math.random() * 180;
+      const finalX = Math.cos(angle * Math.PI / 180) * distance;
+      const finalY = Math.sin(angle * Math.PI / 180) * distance;
+      
+      const delay = Math.random() * 200;
+      
+      setTimeout(() => {
+        translateX.value = withTiming(finalX, { duration: 800, easing: Easing.out(Easing.quad) });
+        translateY.value = withTiming(finalY, { duration: 800, easing: Easing.out(Easing.quad) });
+        scale.value = withSequence(
+          withTiming(1.2, { duration: 300 }),
+          withTiming(0, { duration: 500 })
+        );
+        opacity.value = withSequence(
+          withTiming(1, { duration: 200 }),
+          withTiming(0.7, { duration: 300 }),
+          withTiming(0, { duration: 300 })
+        );
+        rotate.value = withTiming(360 + Math.random() * 360, { duration: 800 });
+        
+        // Shimmer effect
+        shimmer.value = withRepeat(
+          withSequence(
+            withTiming(1, { duration: 150 }),
+            withTiming(0.3, { duration: 150 })
+          ),
+          4,
+          false
+        );
+      }, delay);
+    } else {
+      translateX.value = 0;
+      translateY.value = 0;
+      scale.value = 0;
+      opacity.value = 0;
+      rotate.value = 0;
+      shimmer.value = 0;
+    }
+  }, [isVisible, index, translateX, translateY, scale, opacity, rotate, shimmer]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translateX.value },
+      { translateY: translateY.value },
+      { scale: scale.value },
+      { rotate: `${rotate.value}deg` },
+    ],
+    opacity: opacity.value * shimmer.value,
+  }));
+
+  // Different glitter colors for variety
+  const colors = ['#FFD700', '#FFFFFF', '#FFF8DC', '#E6E6FA', '#F0F8FF'];
+  const color = colors[index % colors.length];
+
+  return (
+    <Animated.View style={[styles.glitterParticle, animatedStyle, { backgroundColor: color }]} />
+  );
+};
+
+const SparkleParticle = ({ index, isVisible }: { index: number; isVisible: boolean }) => {
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+  const scale = useSharedValue(0);
+  const opacity = useSharedValue(0);
+  const twinkle = useSharedValue(0);
+
+  useEffect(() => {
+    if (isVisible) {
+      const angle = Math.random() * 360;
+      const distance = 80 + Math.random() * 120;
+      const finalX = Math.cos(angle * Math.PI / 180) * distance;
+      const finalY = Math.sin(angle * Math.PI / 180) * distance;
+      
+      const delay = Math.random() * 300;
+      
+      setTimeout(() => {
+        translateX.value = withSequence(
+          withTiming(finalX * 0.5, { duration: 400 }),
+          withTiming(finalX, { duration: 400, easing: Easing.out(Easing.quad) })
+        );
+        translateY.value = withSequence(
+          withTiming(finalY * 0.5, { duration: 400 }),
+          withTiming(finalY, { duration: 400, easing: Easing.out(Easing.quad) })
+        );
+        scale.value = withSequence(
+          withTiming(1.5, { duration: 250 }),
+          withTiming(0.8, { duration: 250 }),
+          withTiming(0, { duration: 300 })
+        );
+        opacity.value = withSequence(
+          withTiming(1, { duration: 200 }),
+          withTiming(0.9, { duration: 400 }),
+          withTiming(0, { duration: 200 })
+        );
+        
+        // Twinkling effect
+        twinkle.value = withRepeat(
+          withSequence(
+            withTiming(1, { duration: 100 }),
+            withTiming(0.4, { duration: 100 }),
+            withTiming(1, { duration: 100 }),
+            withTiming(0.6, { duration: 100 })
+          ),
+          3,
+          false
+        );
+      }, delay);
+    } else {
+      translateX.value = 0;
+      translateY.value = 0;
+      scale.value = 0;
+      opacity.value = 0;
+      twinkle.value = 0;
+    }
+  }, [isVisible, index, translateX, translateY, scale, opacity, twinkle]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translateX.value },
+      { translateY: translateY.value },
+      { scale: scale.value },
+    ],
+    opacity: opacity.value * twinkle.value,
+  }));
+
+  return (
+    <Animated.View style={[styles.sparkleParticle, animatedStyle]} />
+  );
+};
+
+const IntenseExplosionRay = ({ index, isVisible }: { index: number; isVisible: boolean }) => {
+  const scale = useSharedValue(0);
+  const opacity = useSharedValue(0);
+  const rotation = useSharedValue((360 / INTENSE_RAYS) * index + Math.random() * 20 - 10);
+  const shimmer = useSharedValue(0);
+  const length = useSharedValue(0);
+  const jitterX = useSharedValue(0);
+  const jitterY = useSharedValue(0);
+  const jitterRotation = useSharedValue(0);
+  const jitterWidth = useSharedValue(1);
+
+  useEffect(() => {
+    if (isVisible) {
+      const delay = index * 20; // Very fast start for intense effect
+      setTimeout(() => {
+        // Super long rays that extend beyond screen
+        length.value = withSequence(
+          withTiming(0, { duration: 0 }),
+          withTiming(8.0, { duration: 180, easing: Easing.out(Easing.quad) }),
+          withTiming(10.0, { duration: 120 }),
+          withTiming(9.5, { duration: 150 }),
+          withTiming(0, { duration: 250, easing: Easing.in(Easing.quad) })
+        );
+        
+        // Very wide and bright
+        scale.value = withSequence(
+          withTiming(0, { duration: 0 }),
+          withTiming(4.5, { duration: 150, easing: Easing.out(Easing.quad) }),
+          withTiming(5.0, { duration: 100 }),
+          withTiming(4.2, { duration: 120 }),
+          withTiming(0, { duration: 200, easing: Easing.in(Easing.quad) })
+        );
+        
+        opacity.value = withSequence(
+          withTiming(1, { duration: 80 }),
+          withTiming(0.98, { duration: 200 }),
+          withTiming(0.9, { duration: 150 }),
+          withTiming(0, { duration: 200 })
+        );
+
+        // Ultra-fast shimmer for intense energy
+        shimmer.value = withRepeat(
+          withSequence(
+            withTiming(1, { duration: 20 }),
+            withTiming(0.5, { duration: 20 }),
+            withTiming(1, { duration: 20 }),
+            withTiming(0.7, { duration: 20 }),
+            withTiming(1, { duration: 20 }),
+            withTiming(0.4, { duration: 20 })
+          ),
+          15,
+          false
+        );
+
+        // High-energy jitter
+        jitterX.value = withRepeat(
+          withSequence(
+            withTiming(Math.random() * 8 - 4, { duration: 25 }),
+            withTiming(Math.random() * 10 - 5, { duration: 30 }),
+            withTiming(Math.random() * 6 - 3, { duration: 20 }),
+            withTiming(0, { duration: 15 })
+          ),
+          12,
+          false
+        );
+
+        jitterRotation.value = withRepeat(
+          withSequence(
+            withTiming(Math.random() * 12 - 6, { duration: 35 }),
+            withTiming(Math.random() * 8 - 4, { duration: 25 }),
+            withTiming(0, { duration: 20 })
+          ),
+          8,
+          false
+        );
+
+        jitterWidth.value = withRepeat(
+          withSequence(
+            withTiming(1 + Math.random() * 0.6, { duration: 40 }),
+            withTiming(0.7 + Math.random() * 0.5, { duration: 35 }),
+            withTiming(1.3 + Math.random() * 0.4, { duration: 30 }),
+            withTiming(1, { duration: 25 })
+          ),
+          8,
+          false
+        );
+      }, delay);
+    } else {
+      scale.value = 0;
+      opacity.value = 0;
+      shimmer.value = 0;
+      length.value = 0;
+      jitterX.value = 0;
+      jitterY.value = 0;
+      jitterRotation.value = 0;
+      jitterWidth.value = 1;
+    }
+  }, [isVisible, index, scale, opacity, shimmer, length, jitterX, jitterY, jitterRotation, jitterWidth]);
+
+  const intenseRayStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: jitterX.value },
+      { translateY: jitterY.value },
+      { rotate: `${rotation.value + jitterRotation.value}deg` },
+      { scaleY: length.value },
+      { scaleX: scale.value * jitterWidth.value },
+    ],
+    opacity: opacity.value * (0.95 + shimmer.value * 0.05),
+  }));
+
+  return (
+    <Animated.View style={[styles.intenseExplosionRay, intenseRayStyle]} />
+  );
+};
+
+const MagicalExplosion = ({ isVisible }: { isVisible: boolean }) => {
+  const centralGlow = useSharedValue(0);
+  const centralScale = useSharedValue(0);
+  const innerGlow = useSharedValue(0);
+  const outerGlow = useSharedValue(0);
+
+  useEffect(() => {
+    if (isVisible) {
+      // Much more powerful central glow - screen filling like reference
+      centralScale.value = withSequence(
+        withTiming(0, { duration: 0 }),
+        withTiming(4.5, { duration: 250, easing: Easing.out(Easing.quad) }),
+        withTiming(5.2, { duration: 200 }),
+        withTiming(4.8, { duration: 150 }),
+        withTiming(0, { duration: 300, easing: Easing.in(Easing.quad) })
+      );
+      
+      centralGlow.value = withSequence(
+        withTiming(1, { duration: 120 }),
+        withTiming(0.95, { duration: 300 }),
+        withTiming(0.85, { duration: 250 }),
+        withTiming(0, { duration: 280 })
+      );
+
+      // Brighter, more intense inner glow
+      innerGlow.value = withSequence(
+        withTiming(1, { duration: 150 }),
+        withTiming(0.9, { duration: 250 }),
+        withTiming(0, { duration: 400 })
+      );
+
+      // More dramatic outer glow shimmer
+      outerGlow.value = withRepeat(
+        withSequence(
+          withTiming(1, { duration: 60 }),
+          withTiming(0.7, { duration: 60 }),
+          withTiming(0.95, { duration: 60 }),
+          withTiming(0.8, { duration: 60 })
+        ),
+        8,
+        false
+      );
+    } else {
+      centralScale.value = 0;
+      centralGlow.value = 0;
+      innerGlow.value = 0;
+      outerGlow.value = 0;
+    }
+  }, [isVisible, centralScale, centralGlow, innerGlow, outerGlow]);
+
+  const centralAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: centralScale.value }],
+    opacity: centralGlow.value,
+  }));
+
+  const innerGlowStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: centralScale.value * 0.8 }],
+    opacity: innerGlow.value,
+  }));
+
+  const outerGlowStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: centralScale.value * 1.2 }],
+    opacity: outerGlow.value * 0.6,
+  }));
+
+  return (
+    <View style={styles.magicalExplosionContainer}>
+      {/* Outer Glow Layer */}
+      <Animated.View style={[styles.outerGlow, outerGlowStyle]} />
+      
+      {/* Central Golden Glow */}
+      <Animated.View style={[styles.centralGlow, centralAnimatedStyle]} />
+      
+      {/* Inner Glow Layer */}
+      <Animated.View style={[styles.innerGlow, innerGlowStyle]} />
+      
+      {/* Intense Central Rays - Super bright like reference */}
+      {Array.from({ length: INTENSE_RAYS }, (_, i) => (
+        <IntenseExplosionRay key={`intense-ray-${i}`} index={i} isVisible={isVisible} />
+      ))}
+      
+      {/* Main Cosmic Rays */}
+      {Array.from({ length: MAIN_RAYS }, (_, i) => (
+        <MainExplosionRay key={`main-ray-${i}`} index={i} isVisible={isVisible} />
+      ))}
+      
+      {/* Sub Rays for realistic effect */}
+      {Array.from({ length: SUB_RAYS }, (_, i) => (
+        <SubExplosionRay key={`sub-ray-${i}`} index={i} isVisible={isVisible} />
+      ))}
+      
+      {/* Fine Sparkle Rays */}
+      {Array.from({ length: RAYS_COUNT }, (_, i) => (
+        <ExplosionRay key={`ray-${i}`} index={i} isVisible={isVisible} />
+      ))}
+      
+      {/* Particles */}
+      {Array.from({ length: PARTICLES_COUNT }, (_, i) => (
+        <ExplosionParticle key={`particle-${i}`} index={i} isVisible={isVisible} />
+      ))}
+      
+      {/* Wave Rings */}
+      {Array.from({ length: WAVE_RINGS }, (_, i) => (
+        <ExplosionWave key={`wave-${i}`} index={i} isVisible={isVisible} />
+      ))}
+      
+      {/* Glitter Particles */}
+      {Array.from({ length: GLITTER_COUNT }, (_, i) => (
+        <GlitterParticle key={`glitter-${i}`} index={i} isVisible={isVisible} />
+      ))}
+      
+      {/* Sparkle Particles */}
+      {Array.from({ length: SPARKLE_COUNT }, (_, i) => (
+        <SparkleParticle key={`sparkle-${i}`} index={i} isVisible={isVisible} />
+      ))}
+    </View>
+  );
+};
+
+const messages = [
+  { id: 1, text: 'Hello there! 🌟' },
+  { id: 2, text: 'Welcome to Kokoro! 💫' },
+  { id: 3, text: 'How are you feeling today? ✨' },
+  { id: 4, text: 'Hope you have a magical day! 🌙' },
+  { id: 5, text: 'You are amazing! 💖' },
+  { id: 6, text: 'Dreams come true here! ⭐' },
+  { id: 7, text: 'Feel the magic around you! 🔮' },
+  { id: 8, text: 'Nature whispers secrets! 🍃' },
+  { id: 9, text: 'Peaceful moments await! 🕯️' },
+  { id: 10, text: 'Light up the darkness! 💡' },
+  { id: 11, text: 'Believe in yourself! 🌈' },
+  { id: 12, text: 'Every moment is precious! 💎' },
+  { id: 13, text: 'Magic flows through you! ✨' },
+  { id: 14, text: 'Serenity surrounds you! 🌸' },
+  { id: 15, text: 'Wonder awaits discovery! 🦋' },
+  { id: 16, text: 'Gentle spirits guide you! 👻' },
+  { id: 17, text: 'Moonlight blesses your path! 🌙' },
+  { id: 18, text: 'Stars align for you! ⭐' },
+  { id: 19, text: 'Magic is everywhere! ✨' },
+  { id: 20, text: 'Shine bright tonight! 🌟' },
+  { id: 21, text: 'Dance with the light! 💫' },
+  { id: 22, text: 'Follow your dreams! 🌙' },
+  { id: 23, text: 'Sparkle and glow! ⭐' },
+  { id: 24, text: 'Nature\'s magic surrounds you! 🍃' },
+  { id: 25, text: 'Embrace the wonder! 🦋' },
+  { id: 26, text: 'Light up the world! 💡' },
+  { id: 27, text: 'Golden moments await! 🌟' },
+  { id: 28, text: 'Mystical energy flows! 🔮' },
+  { id: 29, text: 'Sparkles of joy! ✨' },
+  { id: 30, text: 'Magic surrounds you! 🌙' },
+  { id: 31, text: 'Peaceful dreams! 💫' },
+  { id: 32, text: 'Shining bright! ⭐' },
+  { id: 33, text: 'Gentle whispers! 🍃' },
+  { id: 34, text: 'Dancing lights! 💃' },
+  { id: 35, text: 'Sweet serenity! 🌸' },
+  { id: 36, text: 'Magical moments! 🔮' },
+  { id: 37, text: 'Glowing beauty! 🌟' },
+  { id: 38, text: 'Floating dreams! 💭' },
+  { id: 39, text: 'Twinkling magic! ✨' },
+  { id: 40, text: 'Gentle spirits! 👻' },
+];
+
+const Firefly = ({ message }: { message: { id: number; text: string } }) => {
+  const x = useSharedValue(Math.random() * (width - 80));
+  const y = useSharedValue(Math.random() * (height * 0.35) + height * 0.2); // Middle area above jar
+  const opacity = useSharedValue(0.7 + Math.random() * 0.3);
+  const scale = useSharedValue(0.8 + Math.random() * 0.3);
+  const glowIntensity = useSharedValue(0.8);
+  const wingFlutter = useSharedValue(0);
+  const rotation = useSharedValue(Math.random() * 30 - 15);
+  
+  // Variable speeds - gentle range only (no fast fireflies)
+  const speedMultiplier = 0.3 + Math.random() * 0.4; // Range: 0.3 to 0.7 (gentle movement only)
+  const baseVelocityX = (Math.random() - 0.5) * 0.5 * speedMultiplier; // Gentle base velocity
+  const baseVelocityY = (Math.random() - 0.5) * 0.3 * speedMultiplier; // Gentle vertical movement
+  
+  const velocityX = useSharedValue(baseVelocityX);
+  const velocityY = useSharedValue(baseVelocityY);
+
+  useEffect(() => {
+    // Start movement immediately with initial faster speed
+    const isInitialRelease = true; // Flag for initial jar release
+    const initialSpeedBoost = isInitialRelease ? 2.5 : 1; // Much faster initially (2.5x speed)
+    
+    const baseDuration = (4000 + Math.random() * 3000) / initialSpeedBoost; // Faster initial movement
+    const durationX = baseDuration / speedMultiplier;
+    const durationY = (baseDuration * 1.2) / speedMultiplier;
+    
+    velocityX.value = baseVelocityX;
+    velocityY.value = baseVelocityY;
+    
+    const moveSmooth = () => {
+      const changeAmount = speedMultiplier * 0.08; // Increased change amount for more dynamic movement
+      velocityX.value += (Math.random() - 0.5) * changeAmount;
+      velocityY.value += (Math.random() - 0.5) * changeAmount * 0.7;
+      
+      const maxVelX = (0.4 + speedMultiplier * 0.3) * initialSpeedBoost; // Increased velocity limits with speed boost
+      const maxVelY = (0.2 + speedMultiplier * 0.15) * initialSpeedBoost;
+      
+      velocityX.value = Math.max(-maxVelX, Math.min(maxVelX, velocityX.value));
+      velocityY.value = Math.max(-maxVelY, Math.min(maxVelY, velocityY.value));
+      
+      const distance = (400 + speedMultiplier * 300) * initialSpeedBoost; // Increased travel distance with speed boost
+      const targetX = x.value + velocityX.value * distance;
+      const targetY = y.value + velocityY.value * distance * 0.8;
+      
+      x.value = withTiming(targetX, {
+        duration: durationX,
+        easing: Easing.linear,
+      });
+      
+      y.value = withTiming(targetY, {
+        duration: durationY,
+        easing: Easing.linear,
+      });
+      
+      const rotTarget = Math.atan2(velocityY.value, velocityX.value) * (180 / Math.PI) * 0.15;
+      rotation.value = withTiming(rotTarget, {
+        duration: 3000 / speedMultiplier,
+        easing: Easing.out(Easing.quad),
+      });
+    };
+    
+    // Start moving immediately (no delay)
+    moveSmooth();
+    
+    const intervalTime = (4000 + Math.random() * 2000) / (speedMultiplier * initialSpeedBoost); // Much faster initial intervals
+    
+    const interval = setInterval(() => {
+      let currentX = x.value;
+      let currentY = y.value;
+      
+      // Improved horizontal wrapping for better visibility
+      if (currentX < -30) {
+        x.value = width + 20;
+        velocityX.value = Math.abs(velocityX.value) * 0.7; // Gentle entry
+      } else if (currentX > width + 30) {
+        x.value = -20;
+        velocityX.value = -Math.abs(velocityX.value) * 0.7; // Gentle entry
+      }
+      
+      // Keep fireflies in middle area above the jar
+      if (currentY < height * 0.15) {
+        y.value = height * 0.2;
+        velocityY.value = Math.abs(velocityY.value) * 0.8; // Force downward gently
+      } else if (currentY > height * 0.6) {
+        y.value = height * 0.55;
+        velocityY.value = -Math.abs(velocityY.value) * 0.8; // Force upward gently
+      }
+      
+      moveSmooth();
+    }, intervalTime);
+
+    // Start glow effects immediately
+    const glowSpeed = 1.0 + speedMultiplier * 0.3;
+    
+    // Begin opacity animation immediately
+    opacity.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: (1200 + Math.random() * 600) / glowSpeed }),
+        withTiming(0.4, { duration: (600 + Math.random() * 300) / glowSpeed }),
+        withTiming(0.95, { duration: 400 / glowSpeed }),
+        withTiming(0.3, { duration: (1000 + Math.random() * 500) / glowSpeed })
+      ),
+      -1,
+      true
+    );
+
+    // Begin glow intensity animation immediately
+    const intensityBase = 0.9 + speedMultiplier * 0.4;
+    glowIntensity.value = withRepeat(
+      withSequence(
+        withTiming(intensityBase + 0.5, { duration: 800 / glowSpeed }),
+        withTiming(intensityBase * 0.8, { duration: 600 / glowSpeed }),
+        withTiming(intensityBase + 0.2, { duration: 900 / glowSpeed }),
+        withTiming(intensityBase * 0.6, { duration: 1100 / glowSpeed })
+      ),
+      -1,
+      true
+    );
+
+    // Begin wing flutter animation immediately
+    const flutterSpeed = speedMultiplier * 1.5;
+    wingFlutter.value = withRepeat(
+      withSequence(
+        withTiming(7 * flutterSpeed, { duration: 70 / flutterSpeed }),
+        withTiming(-5 * flutterSpeed, { duration: 70 / flutterSpeed }),
+        withTiming(3 * flutterSpeed, { duration: 70 / flutterSpeed }),
+        withTiming(-1 * flutterSpeed, { duration: 70 / flutterSpeed }),
+        withTiming(0, { duration: 250 / flutterSpeed })
+      ),
+      -1,
+      false
+    );
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [x, y, opacity, glowIntensity, wingFlutter, rotation, velocityX, velocityY, speedMultiplier, baseVelocityX, baseVelocityY]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    position: 'absolute',
+    transform: [
+      { translateX: x.value },
+      { translateY: y.value },
+      { scale: scale.value },
+      { rotate: `${rotation.value}deg` },
+    ],
+    opacity: opacity.value,
+  }));
+
+  const wingAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { rotateY: `${wingFlutter.value}deg` },
+    ],
+  }));
+
+  const handlePress = () => {
+    scale.value = withSequence(
+      withTiming(scale.value + 0.5, { duration: 150 }),
+      withTiming(scale.value, { duration: 300 })
+    );
+    
+    opacity.value = withSequence(
+      withTiming(1, { duration: 100 }),
+      withTiming(opacity.value, { duration: 400 })
+    );
+    
+    alert(message.text);
+  };
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <TouchableOpacity 
+        onPress={handlePress} 
+        hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+        style={styles.fireflyTouch}
+      >
+        <Animated.View style={wingAnimatedStyle}>
+          <Animated.Image
+            source={require('../../assets/images/firefly2.png')}
+            style={[styles.fireflyImage, { 
+              opacity: glowIntensity.value,
+              shadowColor: '#FFFF88',
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: glowIntensity.value * 1.5,
+              shadowRadius: 50 + glowIntensity.value * 25,
+            }]}
+            resizeMode="contain"
+          />
+          {/* Additional glow layers for intense effect */}
+          <Animated.Image
+            source={require('../../assets/images/firefly2.png')}
+            style={[styles.fireflyImage, {
+              position: 'absolute',
+              opacity: glowIntensity.value * 0.7,
+              shadowColor: '#FFDD00',
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: 2.0,
+              shadowRadius: 70,
+            }]}
+            resizeMode="contain"
+          />
+          <Animated.Image
+            source={require('../../assets/images/firefly2.png')}
+            style={[styles.fireflyImage, {
+              position: 'absolute',
+              opacity: glowIntensity.value * 0.4,
+              shadowColor: '#FFFFFF',
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: 2.5,
+              shadowRadius: 90,
+            }]}
+            resizeMode="contain"
+          />
+        </Animated.View>
+      </TouchableOpacity>
+    </Animated.View>
+  );
+};
+
+export default function HomePage() {
+  const [jarOpened, setJarOpened] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [showExplosion, setShowExplosion] = useState(false);
+  
+  const jarScale = useSharedValue(1);
+  const jarRotation = useSharedValue(0);
+  const firefliesOpacity = useSharedValue(0);
+
+  const animatedJarStyle = useAnimatedStyle(() => ({
+    transform: [
+      { scale: jarScale.value },
+      { rotate: `${jarRotation.value}deg` },
+    ],
+  }));
+
+  const animatedFirefliesStyle = useAnimatedStyle(() => ({
+    opacity: firefliesOpacity.value,
+  }));
+
+  const handleJarPress = () => {
+    if (jarOpened) return;
+
+    console.log('Jar pressed - magical explosion triggered');
+
+    // Trigger magical explosion
+    setShowExplosion(true);
+
+    // Jar shakes during explosion
+    jarScale.value = withSequence(
+      withTiming(1.3, { duration: 100 }),
+      withTiming(0.9, { duration: 100 }),
+      withTiming(1.1, { duration: 100 }),
+      withTiming(1, { duration: 200 })
+    );
+
+    jarRotation.value = withSequence(
+      withTiming(-10, { duration: 80 }),
+      withTiming(10, { duration: 120 }),
+      withTiming(-5, { duration: 120 }),
+      withTiming(0, { duration: 150 })
+    );
+
+    // Start confetti and fireflies
+    setShowConfetti(true);
+    
+    firefliesOpacity.value = withTiming(1, { 
+      duration: 1200,
+      easing: Easing.out(Easing.quad) 
+    });
+
+    // Quick transition to empty jar and hide effects
+    setTimeout(() => {
+      setJarOpened(true);
+      setShowConfetti(false);
+      setShowExplosion(false);
+    }, 1200); // Slightly longer to allow magical explosion to complete
+  };
+
+  return (
+    <GestureHandlerRootView style={styles.container}>
+      <ImageBackground
+        source={require('../../assets/images/home_bg.png')}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        <Animated.View style={[styles.firefliesContainer, animatedFirefliesStyle]}>
+          {messages.map((msg) => (
+            <Firefly key={msg.id} message={msg} />
+          ))}
+        </Animated.View>
+
+        <View style={styles.middleSpace} />
+
+        {showConfetti && <SimpleConfetti />}
+
+        {!jarOpened ? (
+          <TouchableOpacity 
+            onPress={handleJarPress}
+            style={styles.jarContainer}
+            activeOpacity={0.8}
+          >
+            <Animated.Image
+              source={require('../../assets/images/firefly_jar.png')}
+              style={[styles.jar, animatedJarStyle]}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.jarContainer}>
+            <Image
+              source={require('../../assets/images/empty_jar.png')}
+              style={styles.jar}
+              resizeMode="contain"
+            />
+          </View>
+        )}
+
+        {/* Magical Explosion Effect */}
+        {showExplosion && (
+          <MagicalExplosion isVisible={showExplosion} />
+        )}
+      </ImageBackground>
+    </GestureHandlerRootView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#001122',
+  },
+  backgroundImage: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 50,
+  },
+  firefliesContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: '100%',
+    width: '100%',
+    pointerEvents: 'box-none',
+  },
+  fireflyTouch: {
+    padding: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fireflyImage: {
+    width: 35,
+    height: 35,
+    shadowColor: '#FFFF00',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 1.0,
+    shadowRadius: 50,
+  },
+  jarContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  jar: {
+    width: 200,
+    height: 300,
+  },
+  middleSpace: {
+    flex: 1,
+  },
+  confettiContainer: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    pointerEvents: 'none',
+  },
+  confettiPiece: {
+    position: 'absolute',
+    left: '50%',
+    marginLeft: -5,
+  },
+  confettiSquare: {
+    width: 10,
+    height: 10,
+  },
+  explosionContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    pointerEvents: 'none',
+  },
+  explosionCircle: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: '#FFD700',
+    shadowColor: '#FFFF00',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    elevation: 10,
+  },
+  magicalExplosionContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    pointerEvents: 'none',
+  },
+  centralGlow: {
+    position: 'absolute',
+    width: width * 2.0,  // Much larger central glow
+    height: width * 2.0,
+    borderRadius: width * 1.0,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#FFFF00',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 3,
+    shadowRadius: 200,
+    elevation: 40,
+  },
+  innerGlow: {
+    position: 'absolute',
+    width: width * 1.5,
+    height: width * 1.5,
+    borderRadius: width * 0.75,
+    backgroundColor: '#FFFF88',
+    shadowColor: '#FFD700',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 2.5,
+    shadowRadius: 150,
+    elevation: 42,
+  },
+  outerGlow: {
+    position: 'absolute',
+    width: width * 2.5,  // Massive outer glow
+    height: width * 2.5,
+    borderRadius: width * 1.25,
+    backgroundColor: '#FFD700',
+    shadowColor: '#FFAA00',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 2,
+    shadowRadius: 250,
+    elevation: 38,
+  },
+  explosionRay: {
+    position: 'absolute',
+    width: 6,
+    height: height * 1.5,  // Much longer - extends beyond screen
+    backgroundColor: '#FFFFFF',
+    borderRadius: 3,
+    top: -height * 0.75,
+    shadowColor: '#FFFF00',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 3,
+    shadowRadius: 40,
+    elevation: 25,
+  },
+  explosionRaySparkle: {
+    position: 'absolute',
+    width: 3,
+    height: height * 1.3,
+    backgroundColor: '#FFDD00',
+    borderRadius: 1.5,
+    top: -height * 0.65,
+    shadowColor: '#FFFFFF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 2.5,
+    shadowRadius: 30,
+    elevation: 27,
+  },
+  mainExplosionRay: {
+    position: 'absolute',
+    width: 0,
+    height: 0,
+    borderLeftWidth: 12,
+    borderRightWidth: 12,
+    borderTopWidth: height * 1.2,  // Extends well beyond screen
+    borderBottomWidth: 0,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#FFFF00',
+    top: -height * 1.2,
+    shadowColor: '#FFDD00',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 3.5,
+    shadowRadius: 60,
+    elevation: 30,
+  },
+  mainRaySparkle: {
+    position: 'absolute',
+    width: 0,
+    height: 0,
+    borderLeftWidth: 6,
+    borderRightWidth: 6,
+    borderTopWidth: height * 1.0,
+    borderBottomWidth: 0,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#FFFFFF',
+    top: -height * 1.0,
+    shadowColor: '#FFFFFF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 4,
+    shadowRadius: 50,
+    elevation: 32,
+  },
+  subExplosionRay: {
+    position: 'absolute',
+    width: 0,
+    height: 0,
+    borderLeftWidth: 4,
+    borderRightWidth: 4,
+    borderTopWidth: height * 0.8,
+    borderBottomWidth: 0,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#FFDD00',
+    top: -height * 0.8,
+    shadowColor: '#FFFF88',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 2.5,
+    shadowRadius: 35,
+    elevation: 26,
+  },
+  explosionParticle: {
+    position: 'absolute',
+    width: 15,
+    height: 15,
+    borderRadius: 7.5,
+    backgroundColor: '#FFD700',
+    shadowColor: '#FFFF88',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1.2,
+    shadowRadius: 20,
+    elevation: 12,
+  },
+  explosionWave: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 3,
+    borderColor: '#FFDD00',
+    backgroundColor: 'transparent',
+    shadowColor: '#FFFF88',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 25,
+  },
+  glitterParticle: {
+    position: 'absolute',
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    shadowColor: '#FFFFFF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 15,
+  },
+  sparkleParticle: {
+    position: 'absolute',
+    width: 0,
+    height: 0,
+    borderLeftWidth: 6,
+    borderRightWidth: 6,
+    borderTopWidth: 6,
+    borderBottomWidth: 6,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#FFFFFF',
+    borderBottomColor: '#FFFFFF',
+    shadowColor: '#FFD700',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 12,
+    elevation: 20,
+  },
+  intenseExplosionRay: {
+    position: 'absolute',
+    width: 0,
+    height: 0,
+    borderLeftWidth: 15,
+    borderRightWidth: 15,
+    borderTopWidth: height * 1.4,  // Super long rays like reference
+    borderBottomWidth: 0,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#FFFFFF',
+    top: -height * 1.4,
+    shadowColor: '#FFFF00',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 4,
+    shadowRadius: 80,
+    elevation: 35,
+  },
+});
