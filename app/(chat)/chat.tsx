@@ -1,5 +1,4 @@
 import { useRouter } from 'expo-router';
-import LottieView from 'lottie-react-native';
 import React, { useEffect, useRef } from 'react';
 import {
   Animated,
@@ -87,12 +86,12 @@ export default function ChatListScreen() {
         style={StyleSheet.absoluteFill}
         blurRadius={0.5}
       />
-      <LottieView
+      {/* <LottieView
         source={require('@/assets/animations/fireflies.json')}
         autoPlay
         loop
         style={StyleSheet.absoluteFill}
-      />
+      /> */}
 
       <Text style={styles.title}>Messages in the Night</Text>
 
