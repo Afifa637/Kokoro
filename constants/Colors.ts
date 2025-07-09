@@ -1,26 +1,26 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
 const Colors = {
-
   warning: '#FFB347',
 
   light: {
-    background: '#FDF6EC',
-    text: '#1A1A1A',
-    mutedText: '#666666',
-    primary: '#F5C518',
-    secondary: '#FFB347',
-    card: '#FFFFFF',
-    iconColor: '#888888',
-    iconColorFocused: '#DAA520',
-    border: '#EAEAEA',
+    background: '#F8F8F5',         // neutral warm ivory
+    backgroundAlt: '#EFEFEA',      // soft light beige for contrast
+    text: '#1E1E1E',               // clean, neutral dark text
+    mutedText: '#6F6F6F',          // slightly softened gray
+    primary: '#D4AF37',            // subtle gold (used rarely)
+    secondary: '#E6B07E',          // light peach-beige tone
+    card: '#FFFFFF',               // white cards for clarity
+    iconColor: '#777777',          // muted gray
+    iconColorFocused: '#C5A552',   // mild gold-tan
+    border: '#E2E2DD',             // faint gray border
+    focus: '#C5A552',              // soft gold highlight
+    shadow: '#DADADA',             // gentle shadow
+    tint: '#C5A552',               // subtle golden tint
   },
+
   dark: {
     background: '#0B0C10',
-    text: '#EDEDED',
+    backgroundAlt: '#1A1C20',
+    text: '#FFDAB9',               // light peach
     mutedText: '#888888',
     primary: '#F5C518',
     secondary: '#FFA500',
@@ -28,7 +28,10 @@ const Colors = {
     iconColor: '#AAAAAA',
     iconColorFocused: '#FFD700',
     border: '#2A2D34',
+    focus: '#F5C518',
+    shadow: '#000000',
+    tint: '#FFD700',
   },
 };
 
-export default Colors; 
+export default Colors;
