@@ -6,7 +6,7 @@ const Colors = {
     backgroundAlt: '#EFEFEA',      // soft light beige for contrast
     text: '#1E1E1E',               // clean, neutral dark text
     mutedText: '#6F6F6F',          // slightly softened gray
-    primary: '#D4AF37',            // subtle gold (used rarely)
+    primary: '#998A2A',            // subtle gold (used rarely)
     secondary: '#E6B07E',          // light peach-beige tone
     card: '#FFFFFF',               // white cards for clarity
     iconColor: '#777777',          // muted gray

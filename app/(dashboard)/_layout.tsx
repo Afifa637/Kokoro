@@ -79,6 +79,8 @@ const DashboardLayout = () => {
   const insets = useSafeAreaInsets()
   
   return (
+    <Tabs />
+    
     <View style={styles.container}>
       {/* Background that shows behind transparent navbar */}
       <ImageBackground
